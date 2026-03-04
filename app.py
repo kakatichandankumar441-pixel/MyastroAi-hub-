@@ -10,7 +10,7 @@ model = genai.GenerativeModel('gemini-pro')
 st.set_page_config(page_title="AI Multi-Tool Hub", layout="wide")
 
 # मल्टी-लैंग्वेज ड्रॉपडाउन
-lang = st.sidebar.selectbox("Language / ভাষা / ভাষা", ["English", "Hindi", "Bengali", "Assamese"])
+lang = st.sidebar.selectbox("Language / ভাষা / ভাষা", ["English", "Hindi", "Bengali", "Assamese" "Hindlish"])
 
 # --- 3. Sidebar: Payment & QR ---
 st.sidebar.title("💰 Premium Access")
