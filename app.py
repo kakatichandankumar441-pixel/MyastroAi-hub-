@@ -14,7 +14,7 @@ st.set_page_config(page_title="MyastroAi Hub", layout="wide")
 st.sidebar.title("MyastroAi Hub")
 
 # भाषा का चुनाव
-lang = st.sidebar.selectbox("Language / ভাষা / भाषा", ["English", "Hindi", "Bengali", "Assamese", "Bodo"])
+lang = st.sidebar.selectbox("Language / ভাষা / भाषा", ["English", "Hindi", "Bengali", "Assamese", "Bodo","Hinglish])
 
 st.sidebar.markdown("---")
 st.sidebar.subheader("💰 Premium Payment")
