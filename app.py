@@ -1,42 +1,47 @@
 import streamlit as st
 import google.generativeai as genai
 
-# --- 1. AI Setup (यहाँ अपनी API Key डालें) ---
-# अपनी फ्री API Key 'aistudio.google.com' से लें
-genai.configure(api_key="AIzaSyDdliDBmDHDgbs00EzmuP6JAwLGUYXnr3g")
+# --- 1. AI SETUP ---
+# अपनी API Key यहाँ डालें
+API_KEY = "AIzaSyDdliDBmDHDgbs00EzmuP6JAwLGUYXnr3g" 
+genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-pro')
 
-# --- 2. UI Configuration ---
-st.set_page_config(page_title="AI Multi-Tool Hub", layout="wide")
+# --- 2. PAGE SETTINGS ---
+st.set_page_config(page_title="MyastroAi Hub", layout="wide")
 
-# मल्टी-लैंग्वेज ड्रॉपडाउन
-lang = st.sidebar.selectbox("Language / ভাষা / ভাষা", ["English", "Hindi", "Bengali", "Assamese" "Hindlish"])
+# --- 3. SIDEBAR (UPI & Language) ---
+st.sidebar.title("MyastroAi Hub")
 
-# --- 3. Sidebar: Payment & QR ---
-st.sidebar.title("💰 Premium Access")
-st.sidebar.image("image.png", caption="Scan & Pay to My-astroai@ptaxis")
-st.sidebar.write("UPI ID: `My-astroai@ptaxis`")
-st.sidebar.info("पेमेंट के बाद स्क्रीनशॉट भेजें।")
+# भाषा का चुनाव
+lang = st.sidebar.selectbox("Language / ভাষা / भाषा", ["English", "Hindi", "Bengali", "Assamese", "Bodo"])
 
-# --- 4. Main AI Interface ---
-st.title("🚀 Smart AI Assistant")
-user_query = st.text_area(f"Ask anything in {lang} / कुछ भी पूछें:")
+st.sidebar.markdown("---")
+st.sidebar.subheader("💰 Premium Payment")
 
-if st.button("Generate Response"):
-    if user_query:
-        with st.spinner("AI सोच रहा है..."):
-            # AI को निर्देश देना कि वह चुनी हुई भाषा में जवाब दे
-            prompt = f"Answer the following question in {lang} language: {user_query}"
+# QR हटाकर सिर्फ UPI ID ऐड किया गया है
+st.sidebar.info("Direct UPI Payment")
+st.sidebar.code("My-astroai@ptaxis", language=None)
+st.sidebar.write("पेमेंट करने के बाद यहाँ स्क्रीनशॉट अपलोड करें:")
+
+# स्क्रीनशॉट अपलोड ऑप्शन
+proof = st.sidebar.file_uploader("Upload Screenshot", type=['png', 'jpg', 'jpeg'])
+if proof:
+    st.sidebar.success("Verification in progress!")
+
+# --- 4. MAIN INTERFACE ---
+st.title("🌟 Welcome to MyastroAi Hub")
+st.write("---")
+
+# AI Chat Section
+st.subheader(f"Ask AI in {lang}")
+user_input = st.text_input("Type your question here...")
+
+if st.button("Generate Result"):
+    if user_input:
+        with st.spinner("Processing..."):
+            prompt = f"Answer in {lang}: {user_input}"
             response = model.generate_content(prompt)
-            st.markdown("### AI Response:")
-            st.write(response.text)
+            st.markdown(response.text)
     else:
-        st.warning("कृपया पहले कुछ लिखें!")
-
-# --- 5. Future Options (Tabs) ---
-tab1, tab2 = st.tabs(["📊 Business Plan", "💻 Custom Coding"])
-with tab1:
-    st.write("अपना बिजनेस आइडिया यहाँ लिखें, AI प्लान बना देगा।")
-with tab2:
-    st.write("कोडिंग प्रोजेक्ट्स के लिए यहाँ रिक्वेस्ट करें।")
-  
+        st.warning("Please enter something first!")
