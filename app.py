@@ -2,112 +2,59 @@ import streamlit as st
 import google.generativeai as genai
 
 # --- 1. AI SETUP ---
-API_KEY = "AIzaSyDEgzucVgRbzDb83SUMVX5omqgPRhH22CU"
+API_KEY = "AIzaSyDEgzucVgRbzDb83SUMVX5omqgPRhH22CU" #
 genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-1.5-flash') #
 
-# --- 2. PREMIUM LOOK & UI SETTINGS ---
-st.set_page_config(page_title="MyastroAi Hub", page_icon="✨", layout="wide")
-
-# Custom CSS for Royal Theme
+# --- 2. THEME & BRANDING ---
+st.set_page_config(page_title="MyastroAi Hub", page_icon="🌟", layout="wide")
 st.markdown("""
     <style>
-    .stApp {
-        background: linear-gradient(to bottom, #000428, #004e92);
-        color: white;
-    }
-    .main-header {
-        font-size: 55px;
-        font-weight: bold;
-        color: #D4AF37; /* Royal Gold */
-        text-align: center;
-        text-shadow: 2px 2px 10px #000;
-        margin-bottom: 10px;
-    }
-    .sub-header {
-        color: #f1f1f1;
-        text-align: center;
-        font-style: italic;
-    }
-    .stButton>button {
-        background-color: #D4AF37 !important;
-        color: black !important;
-        font-weight: bold !important;
-        border-radius: 25px !important;
-        border: none !important;
-        box-shadow: 0px 4px 15px rgba(212, 175, 55, 0.4);
-    }
-    .stDownloadButton>button {
-        background-color: #28a745 !important;
-        color: white !important;
-        border-radius: 20px !important;
-    }
-    .card {
-        background: rgba(255, 255, 255, 0.1);
-        padding: 20px;
-        border-radius: 15px;
-        border: 1px solid rgba(212, 175, 55, 0.3);
-        margin-bottom: 20px;
-    }
+    .stApp { background: linear-gradient(to bottom, #000428, #004e92); color: white; }
+    .main-title { font-size: 55px; color: #D4AF37; text-align: center; font-weight: bold; }
+    .payment-card { background: white; color: black; padding: 20px; border-radius: 15px; text-align: center; border: 3px solid #D4AF37; }
     </style>
     """, unsafe_allow_html=True)
 
-# --- 3. SIDEBAR (Premium Sidebar) ---
-st.sidebar.markdown("<h2 style='color:#D4AF37; text-align:center;'>👑 MyastroAi Hub</h2>", unsafe_allow_html=True)
-lang = st.sidebar.selectbox("Bhasha chunein (Language)", ["Hindi", "English", "Bengali", "Assamese", "Bodo"])
-
-st.sidebar.markdown("---")
-st.sidebar.subheader("💎 Premium Payment")
-st.sidebar.info("Direct UPI Payment")
-st.sidebar.code("My-astroai@ptaxis", language=None)
-st.sidebar.write("Scan karne ke liye keybord mic use karein.")
+# --- 3. SIDEBAR ---
+st.sidebar.markdown("<h2 style='color:#D4AF37; text-align:center;'>🌟 MyastroAi Hub</h2>", unsafe_allow_html=True)
+st.sidebar.info(f"Owner: Chandan Kumar Kakati") #
+lang = st.sidebar.selectbox("Bhasha / Language", ["Hindi", "English", "Bengali", "Assamese", "Bodo"]) #
 
 # --- 4. MAIN INTERFACE ---
-st.markdown("<div class='main-header'>🌟 MyastroAi Hub 🌟</div>", unsafe_allow_html=True)
-st.markdown("<div class='sub-header'>Aapka AI Dost - Astro, Business aur Code ka Sathi</div>", unsafe_allow_html=True)
-st.write("---")
+st.markdown("<div class='main-title'>MyastroAi Hub</div>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center;'>Aapka Apna Smart AI Assistant</p>", unsafe_allow_html=True)
 
-# Instruction for Voice (Hindi/English Mix for Friendliness)
-st.info("🎤 **Dost:** Bol kar baat karne ke liye apne Mobile Keyboard ke **Mic 🎙️** icon par click karein!")
-
-# Tabs for Services
-tab1, tab2, tab3 = st.tabs(["🔮 Future AI", "🚀 Business Hub", "💻 Coding Lab"])
+tab1, tab2, tab3 = st.tabs(["🔮 Services", "💳 Payment Center", "📸 Upload Screenshot"])
 
 with tab1:
-    st.markdown("<div class='card'><h3>Astro Prediction & Voice Help</h3></div>", unsafe_allow_html=True)
-    astro_input = st.text_area("Yahan sawal likhein ya mic se bole (e.g., Mera bhavishya kaisa hoga?)...", key="astro")
-    
-    if st.button("Get Astro Report 🔮"):
-        if astro_input:
-            with st.spinner("Sitara-mandal check ho raha hai..."):
-                res = model.generate_content(f"Act as a friendly expert astrologer. Answer in {lang}: {astro_input}")
-                st.markdown(f"#### 📜 Aapka Bhavishya:\n{res.text}")
-                st.download_button("📥 Download Astro Report", data=res.text, file_name="Astro_Report.txt")
-        else:
-            st.warning("Pehle sawal toh puchiye dost!")
+    st.subheader("Puchiye apna sawal (Astro/Business):")
+    u_input = st.text_area("🎤 Mic se bole ya yahan likhein:", key="main_in")
+    if st.button("Generate Answer"):
+        if u_input:
+            res = model.generate_content(f"Answer in {lang}: {u_input}")
+            st.write(res.text)
+            st.download_button("📥 Download Result", data=res.text, file_name="MyastroAi_Report.txt") #
 
 with tab2:
-    st.markdown("<div class='card'><h3>Business & Marketing Strategy</h3></div>", unsafe_allow_html=True)
-    biz_input = st.text_area("Business plan ya marketing ke liye bole...", key="biz")
-    
-    if st.button("Generate Business Plan 🚀"):
-        if biz_input:
-            with st.spinner("Master plan taiyar ho raha hai..."):
-                res = model.generate_content(f"Create a business and marketing strategy in {lang} for: {biz_input}")
-                st.write(res.text)
-                st.download_button("📥 Download Business Plan", data=res.text, file_name="Business_Plan.txt")
+    st.markdown("<div class='payment-card'>", unsafe_allow_html=True)
+    st.subheader("💰 Payment Options")
+    st.image("https://raw.githubusercontent.com/kakatichandankumar441-pixel/MyastroAi-hub-/main/image.png", width=250) #
+    upi_id = "My-astroai@ptaxis" #
+    pay_url = f"upi://pay?pa={upi_id}&pn=MyastroAi%20Hub&cu=INR"
+    st.markdown(f'<a href="{pay_url}" style="background-color:#004e92; color:white; padding:10px 20px; border-radius:25px; text-decoration:none;">Direct UPI Pay 📲</a>', unsafe_allow_html=True)
+    st.markdown(f"<p style='color:black; margin-top:10px;'>UPI ID: <b>{upi_id}</b></p>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 with tab3:
-    st.markdown("<div class='card'><h3>Coding & Technical System</h3></div>", unsafe_allow_html=True)
-    code_input = st.text_area("Kaunsa code likhna hai? Mic se batayein...", key="code")
-    
-    if st.button("Generate Code 💻"):
-        if code_input:
-            with st.spinner("Coding in progress..."):
-                res = model.generate_content(f"Write professional code for: {code_input}")
-                st.code(res.text)
-                st.download_button("📥 Download Source Code", data=res.text, file_name="code_file.py")
+    st.subheader("📤 Send Payment Screenshot")
+    st.write("Payment karne ke baad uska screenshot niche upload karein:")
+    proof = st.file_uploader("Choose Screenshot Image", type=['png', 'jpg', 'jpeg'])
+    if proof:
+        st.image(proof, caption="Screenshot Uploaded Successfully!", use_container_width=True)
+        st.success("Dost Chandan, aapka screenshot receive ho gaya hai. Hum jald hi aapse contact karenge!") #
 
 # --- 5. FOOTER ---
 st.markdown("---")
-st.markdown("<p style='text-align: center; color: #D4AF37;'>Handcrafted with ❤️ for Dildar Hussain | © 2026 MyastroAi</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #D4AF37;'>© 2026 MyastroAi Hub | Trusted by Chandan Kumar Kakati</p>", unsafe_allow_html=True) #
+    
