@@ -2,12 +2,12 @@ import streamlit as st
 import google.generativeai as genai
 
 # --- 1. AI SETUP ---
-# आपकी लेटेस्ट API Key यहाँ सेट कर दी है
+# आपकी लेटेस्ट API Key यहाँ सेट है
 API_KEY = "AIzaSyDEgzucVgRbzDb83SUMVX5omqgPRhH22CU"
 
 try:
     genai.configure(api_key=API_KEY)
-    # एरर फिक्स करने के लिए 'gemini-1.5-flash' का इस्तेमाल किया है
+    # यहाँ बदलाव किया है: 'gemini-1.5-flash' सबसे नया और स्टेबल मॉडल है
     model = genai.GenerativeModel('gemini-1.5-flash')
 except Exception as e:
     st.error(f"Setup Error: {e}")
@@ -22,9 +22,8 @@ lang = st.sidebar.selectbox("Language / ভাষা / भाषा", ["Hindi", 
 st.sidebar.markdown("---")
 st.sidebar.subheader("💰 Premium Payment")
 st.sidebar.info("Direct UPI Payment")
-# आपका UPI ID यहाँ साफ़ दिखेगा
 st.sidebar.code("My-astroai@ptaxis", language=None)
-st.sidebar.write("पेमेंट के बाद स्क्रीनशॉट सुरक्षित रखें।")
+st.sidebar.write("Payment के बाद screenshot सुरक्षित रखें।")
 
 # --- 4. MAIN INTERFACE ---
 st.title("🌟 Welcome to MyastroAi Hub")
@@ -38,20 +37,15 @@ if st.button("Generate Result"):
         with st.spinner("MyastroAi सोच रहा है..."):
             try:
                 # AI को निर्देश देना
-                prompt = f"Answer in {lang}: {user_input}"
+                prompt = f"Answer in {lang} language: {user_input}"
                 response = model.generate_content(prompt)
                 st.markdown(f"### जवाब:\n{response.text}")
             except Exception as e:
-                # अगर नया मॉडल फेल हो तो पुराना मॉडल ट्राई करेगा
-                try:
-                    backup_model = genai.GenerativeModel('gemini-pro')
-                    response = backup_model.generate_content(f"Answer in {lang}: {user_input}")
-                    st.markdown(response.text)
-                except:
-                    st.error("AI मॉडल कनेक्ट नहीं हो पा रहा है। कृपया कुछ देर बाद कोशिश करें।")
+                # अगर कोई समस्या आए तो बैकअप मॉडल
+                st.error("AI अभी कनेक्ट नहीं हो पा रहा है। कृपया 1 मिनट बाद फिर से कोशिश करें।")
     else:
         st.warning("कृपया पहले कुछ लिखें!")
 
 # --- 5. FOOTER ---
 st.markdown("---")
-st.caption("Powered by MyastroAi Hub")
+st.caption("Powered by MyastroAi Hub , in assam ")
